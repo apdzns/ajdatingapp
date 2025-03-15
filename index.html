@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fun date idea generator for Austin & Jacquie in North County San Diego">
+    <meta name="theme-color" content="#4CAF50">
+    <title>THE A&J DATING GAME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body>
+    <header>
+        <h1>THE A&J DATING GAME</h1>
+    </header>
+    <div id="quick-filters">
+        <button id="quick-kid-friendly" class="quick-filter" aria-label="Toggle Kid-Friendly Filter"><i class="fas fa-child"></i> Kid-Friendly</button>
+        <button id="quick-outdoor" class="quick-filter" aria-label="Toggle Outdoor Filter"><i class="fas fa-tree"></i> Outdoor</button>
+        <button id="quick-free" class="quick-filter" aria-label="Toggle Free Filter"><i class="fas fa-dollar-sign"></i> Free</button>
+        <button id="quick-couple" class="quick-filter" aria-label="Toggle Couple Only Filter"><i class="fas fa-heart"></i> Couple Only</button>
+    </div>
+    <main>
+        <section id="tutorial" class="hidden">
+            <h2>Welcome to Our Dating Adventure!</h2>
+            <p>Use the filters above or below to find dates. Tap "Find a Date" to start, and add to your home screen for easy access!</p>
+            <button id="close-tutorial">Let’s Go!</button>
+        </section>
+        <section id="filters">
+            <h2>Find Your Perfect Date</h2>
+            <div class="filter-group">
+                <input type="checkbox" id="kid-friendly-toggle" aria-label="Kid-Friendly Toggle">
+                <label for="kid-friendly-toggle">Kid-Friendly</label>
+                <input type="checkbox" id="couple-only-toggle" aria-label="Couple Only Toggle">
+                <label for="couple-only-toggle">Couple Only</label>
+            </div>
+            <details class="filter-details">
+                <summary>More Filters</summary>
+                <div class="filter-group type-filters">
+                    <h3>Types</h3>
+                    <input type="checkbox" id="active-filter" name="type" value="active">
+                    <label for="active-filter">Active</label>
+                    <input type="checkbox" id="relaxing-filter" name="type" value="relaxing">
+                    <label for="relaxing-filter">Relaxing</label>
+                    <input type="checkbox" id="cultural-filter" name="type" value="cultural">
+                    <label for="cultural-filter">Cultural</label>
+                    <input type="checkbox" id="educational-filter" name="type" value="educational">
+                    <label for="educational-filter">Educational</label>
+                    <input type="checkbox" id="entertainment-filter" name="type" value="entertainment">
+                    <label for="entertainment-filter">Entertainment</label>
+                </div>
+                <div class="filter-group category-filters">
+                    <h3>Categories</h3>
+                    <input type="checkbox" id="adventure-filter" name="category" value="adventure">
+                    <label for="adventure-filter">Adventure</label>
+                    <input type="checkbox" id="relaxation-filter" name="category" value="relaxation">
+                    <label for="relaxation-filter">Relaxation</label>
+                    <input type="checkbox" id="food-filter" name="category" value="food">
+                    <label for="food-filter">Food</label>
+                    <input type="checkbox" id="nature-filter" name="category" value="nature">
+                    <label for="nature-filter">Nature</label>
+                    <input type="checkbox" id="family-filter" name="category" value="family">
+                    <label for="family-filter">Family</label>
+                    <input type="checkbox" id="wellness-filter" name="category" value="wellness">
+                    <label for="wellness-filter">Wellness</label>
+                </div>
+                <div class="filter-group">
+                    <h3>Budget</h3>
+                    <select id="budget-filter" aria-label="Budget Filter">
+                        <option value="all">All</option>
+                        <option value="0-20">$0-$20</option>
+                        <option value="20-50">$20-$50</option>
+                        <option value="50+">$50+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <h3>Mood</h3>
+                    <select id="mood-filter" aria-label="Mood Filter">
+                        <option value="all">All</option>
+                        <option value="adventurous">Adventurous</option>
+                        <option value="relaxed">Relaxed</option>
+                        <option value="romantic">Romantic</option>
+                        <option value="playful">Playful</option>
+                    </select>
+                </div>
+            </details>
+        </section>
+        <section id="actions">
+            <h2>Plan Your Next Adventure</h2>
+            <div class="action-buttons">
+                <button id="generate-btn" title="Find new date ideas" aria-label="Generate new date ideas"><i class="fas fa-search"></i> Find a Date</button>
+                <button id="surprise-btn" title="Get a random date" aria-label="Get a random date"><i class="fas fa-gift"></i> Surprise Me</button>
+                <button id="theme-toggle" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="custom-theme-btn" title="Customize Theme" aria-label="Customize Theme"><i class="fas fa-palette"></i> Theme</button>
+            </div>
+        </section>
+        <section id="date-ideas">
+            <h2 id="date-ideas-title">For Both</h2>
+            <div id="date-ideas-container">
+                <div id="idea1" class="date-idea card">
+                    <h2><i class="fas fa-star"></i> Idea 1</h2>
+                    <p id="idea1-icon"></p>
+                    <p id="idea1-location-name"></p>
+                    <p id="idea1-address"></p>
+                    <p id="idea1-hours"></p>
+                    <p id="idea1-costs"></p>
+                    <p id="idea1-weather"></p>
+                    <p id="idea1-wellness"></p>
+                    <p id="idea1-description"></p>
+                    <p id="idea1-justification"></p>
+                    <button class="directions-btn" data-section="idea1" aria-label="Get Directions for Idea 1">Directions</button>
+                </div>
+                <div id="idea2" class="date-idea card">
+                    <h2><i class="fas fa-star"></i> Idea 2</h2>
+                    <p id="idea2-icon"></p>
+                    <p id="idea2-location-name"></p>
+                    <p id="idea2-address"></p>
+                    <p id="idea2-hours"></p>
+                    <p id="idea2-costs"></p>
+                    <p id="idea2-weather"></p>
+                    <p id="idea2-wellness"></p>
+                    <p id="idea2-description"></p>
+                    <p id="idea2-justification"></p>
+                    <button class="directions-btn" data-section="idea2" aria-label="Get Directions for Idea 2">Directions</button>
+                </div>
+                <div id="idea3" class="date-idea card">
+                    <h2><i class="fas fa-star"></i> Idea 3</h2>
+                    <p id="idea3-icon"></p>
+                    <p id="idea3-location-name"></p>
+                    <p id="idea3-address"></p>
+                    <p id="idea3-hours"></p>
+                    <p id="idea3-costs"></p>
+                    <p id="idea3-weather"></p>
+                    <p id="idea3-wellness"></p>
+                    <p id="idea3-description"></p>
+                    <p id="idea3-justification"></p>
+                    <button class="directions-btn" data-section="idea3" aria-label="Get Directions for Idea 3">Directions</button>
+                </div>
+            </div>
+        </section>
+        <section id="map-section">
+            <h2>Location Map</h2>
+            <div id="map" style="height: 300px;"></div>
+        </section>
+        <section id="history">
+            <h2>Your Date Memories</h2>
+            <ul id="history-list"></ul>
+            <input type="file" id="photo-upload" accept="image/*" style="display: none;" aria-label="Upload Photo">
+            <button id="upload-photo-btn" aria-label="Add Photo to Last Date">Add Photo</button>
+        </section>
+        <section id="achievements">
+            <h2>Your Achievements</h2>
+            <p id="points">Points: 0</p>
+            <p id="badges">Badges: None</p>
+            <p id="streak">Streak: 0 days</p>
+            <p id="challenges">Challenges: None</p>
+        </section>
+        <section id="recommended">
+            <h2>Recommended for You</h2>
+            <ul id="recommended-list"></ul>
+        </section>
+        <section id="upcoming">
+            <h2>Upcoming Dates</h2>
+            <ul id="upcoming-list"></ul>
+        </section>
+        <section id="tagged-dates">
+            <h2>Your Tagged Dates</h2>
+            <ul id="tagged-list"></ul>
+        </section>
+        <section id="add-date-idea">
+            <h2>Create a New Date Idea</h2>
+            <form id="date-idea-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required aria-label="Date Idea Name">
+                <label for="description">Description:</label>
+                <textarea id="description" required aria-label="Date Idea Description"></textarea>
+                <label for="tags">Tags (comma-separated):</label>
+                <input type="text" id="tags" required aria-label="Tags">
+                <label for="category">Category:</label>
+                <select id="category" required aria-label="Category">
+                    <option value="adventure">Adventure</option>
+                    <option value="relaxation">Relaxation</option>
+                    <option value="food">Food</option>
+                    <option value="nature">Nature</option>
+                    <option value="family">Family</option>
+                    <option value="wellness">Wellness</option>
+                </select>
+                <label for="location-name">Location Name:</label>
+                <input type="text" id="location-name" required aria-label="Location Name">
+                <label for="address">Address:</label>
+                <input type="text" id="address" required aria-label="Address">
+                <label for="hours">Hours (e.g., 9:00 AM - 5:00 PM):</label>
+                <input type="text" id="hours" required aria-label="Hours">
+                <label for="costs">Costs (e.g., $20-30):</label>
+                <input type="text" id="costs" required aria-label="Costs">
+                <label for="icon">Icon (Font Awesome class, e.g., fas fa-hiking):</label>
+                <input type="text" id="icon" required aria-label="Icon Class">
+                <button type="submit" aria-label="Add Date Idea">Add Date Idea</button>
+            </form>
+        </section>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.log('Service Worker registration failed', err));
+        }
+    </script>
+</body>
+</html>
