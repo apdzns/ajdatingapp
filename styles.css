@@ -1,11 +1,8 @@
 :root {
     --header-bg: linear-gradient(to right, #4CAF50, #008CBA);
     --button-bg: #008CBA;
-    --highlight-bg: #f0f8ff;
-    --highlight-border: #FFD700;
     --section-bg: white;
     --text-color: #333;
-    --progress-color: #4CAF50;
 }
 
 body {
@@ -23,10 +20,8 @@ body.dark-mode {
     color: #f0f0f0;
     --header-bg: linear-gradient(to right, #2a6b2f, #005f73);
     --button-bg: #006d9e;
-    --highlight-bg: #4d4d4d;
     --section-bg: #2d2d2d;
     --text-color: #f0f0f0;
-    --progress-color: #66bb6a;
 }
 
 header {
@@ -118,7 +113,7 @@ body.dark-mode section h2 {
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
-    align-items: center;
+    align september-items: center;
 }
 
 .filter-group h3 {
@@ -200,7 +195,7 @@ button:focus {
     outline-offset: 2px;
 }
 
-#theme-toggle, #custom-theme-btn {
+#theme-toggle {
     background-color: transparent;
     font-size: 1.3em;
     padding: 0.5em;
@@ -271,85 +266,6 @@ body.dark-mode .card h2 {
     background-color: #d32f2f;
 }
 
-#history-list, #recommended-list, #upcoming-list, #tagged-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-#history-list li, #recommended-list li, #upcoming-list li, #tagged-list li {
-    padding: 0.75em 0;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    gap: 0.75em;
-    transition: background-color 0.2s;
-}
-
-#history-list li:hover, #recommended-list li:hover, #upcoming-list li:hover, #tagged-list li:hover {
-    background-color: #f5f5f5;
-}
-
-body.dark-mode #history-list li,
-body.dark-mode #recommended-list li,
-body.dark-mode #upcoming-list li,
-body.dark-mode #tagged-list li {
-    border-bottom: 1px solid #666;
-}
-
-body.dark-mode #history-list li:hover,
-body.dark-mode #recommended-list li:hover,
-body.dark-mode #upcoming-list li:hover,
-body.dark-mode #tagged-list li:hover {
-    background-color: #444;
-}
-
-#history-list li img {
-    max-width: 60px;
-    max-height: 60px;
-    margin-left: 0.75em;
-    border-radius: 4px;
-}
-
-form {
-    display: grid;
-    gap: 1em;
-    grid-template-columns: 1fr 2fr;
-}
-
-form label {
-    font-weight: 700;
-}
-
-form input, form textarea, form select {
-    padding: 0.75em;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: border-color 0.3s, background-color 0.3s;
-}
-
-form textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-body.dark-mode form input,
-body.dark-mode form textarea,
-body.dark-mode form select {
-    background-color: #555;
-    border-color: #777;
-    color: #f0f0f0;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
-    grid-column: span 2;
-}
-
-button[type="submit"]:hover {
-    background-color: #45a049;
-}
-
 .hidden {
     display: none;
 }
@@ -396,12 +312,6 @@ body.dark-mode #tutorial {
     .filter-group {
         flex-direction: column;
         align-items: flex-start;
-    }
-    form {
-        grid-template-columns: 1fr;
-    }
-    button[type="submit"] {
-        grid-column: span 1;
     }
     .action-buttons {
         flex-direction: column;
