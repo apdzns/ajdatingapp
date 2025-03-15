@@ -1,9 +1,11 @@
-const CACHE_NAME = 'aj-dating-game-v1';
+const CACHE_NAME = 'aj-dating-game-v2';
 const urlsToCache = [
     '/',
     '/index.html',
     '/styles.css',
     '/script.js',
+    '/icon-192.png',
+    '/icon-512.png',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
@@ -13,6 +15,7 @@ self.addEventListener('install', event => {
             .then(cache => {
                 return cache.addAll(urlsToCache);
             })
+            .catch(err => console.log('Cache add failed:', err))
     );
 });
 
@@ -20,7 +23,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                return response || fetch(event.request);
+                return response || fetch(event.request).catch(() => {
+                    return caches.match('/index.html'); // Fallback to cached index.html
+                });
             })
     );
 });

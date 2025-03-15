@@ -113,7 +113,7 @@ body.dark-mode section h2 {
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
-    align september-items: center;
+    align-items: center;
 }
 
 .filter-group h3 {

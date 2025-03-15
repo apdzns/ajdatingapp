@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Expanded date ideas list for Escondido, San Marcos, Vista, Carlsbad, and Oceanside
-    const defaultDateIdeas = [
+    const dateIdeas = [
         // Escondido - Couple Ideas
         { name: "Sunset Picnic at Kit Carson Park", description: "Pack a blanket and watch the sunset.", tags: ["outdoor", "relaxing", "romantic"], preference: "both", category: "relaxation", locationName: "Kit Carson Park", address: "3333 Bear Valley Pkwy, Escondido, CA 92025", hours: "6:00 AM - 10:00 PM", costs: "Free", lat: 33.1045, lon: -117.0568, icon: "fas fa-picnic", mood: "romantic" },
         { name: "Wine Tasting at Orfila Vineyards", description: "Sip local wines in a cozy vineyard.", tags: ["indoor", "food", "romantic"], preference: "both", category: "food", locationName: "Orfila Vineyards", address: "13455 San Pasqual Rd, Escondido, CA 92025", hours: "11:00 AM - 7:00 PM", costs: "$20-30 per person", lat: 33.0825, lon: -117.0188, icon: "fas fa-wine-glass", mood: "romantic" },
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Bike Ride at Guajome", description: "Cycle trails as a family.", tags: ["outdoor", "active", "kid-friendly-only"], preference: "both", category: "family", locationName: "Guajome Regional Park", address: "3000 Guajome Lake Rd, Oceanside, CA 92057", hours: "6:00 AM - 7:00 PM", costs: "$3 parking", lat: 33.2450, lon: -117.2705, icon: "fas fa-bicycle", mood: "playful" }
     ];
 
-    // Load current ideas from local storage
+    // Load current ideas and theme from local storage
     let currentIdeas = JSON.parse(localStorage.getItem('currentIdeas')) || [];
 
     // Save data to local storage
@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     };
 
-    // Get a random date idea with filters
-    const getRandomDateIdea = (kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter) => {
-        let filteredIdeas = defaultDateIdeas.filter(idea => idea.preference === "both");
+    // Get random date ideas with filters
+    const getRandomDateIdeas = (kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter) => {
+        let filteredIdeas = dateIdeas.slice(); // Clone array
         
         if (kidFriendly && coupleOnly) {
             filteredIdeas = filteredIdeas.filter(idea => 
@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (budgetFilter === "0-20") return maxCost <= 20 || idea.costs === "Free";
                 if (budgetFilter === "20-50") return maxCost > 20 && maxCost <= 50;
                 if (budgetFilter === "50+") return maxCost > 50;
+                return false;
             });
         }
 
@@ -141,10 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('date-ideas-title');
         title.textContent = kidFriendly ? "For the Family" : "For Both";
 
-        const selectedIdeas = ideas.length ? ideas : getRandomDateIdea(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
+        const selectedIdeas = ideas.length ? ideas : getRandomDateIdeas(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
         currentIdeas = selectedIdeas;
         saveData();
-        
+
         const displayIdea = (id, idea) => {
             const card = document.getElementById(id);
             if (idea) {
@@ -160,25 +161,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById(`${id}-address`).textContent = "";
                 document.getElementById(`${id}-hours`).textContent = "";
                 document.getElementById(`${id}-costs`).textContent = "";
-                document.getElementById(`${id}-description`).textContent = `No ${id.replace('idea', 'Idea ')} date ideas match your filters. Try again!`;
+                document.getElementById(`${id}-description`).textContent = `No ${id.replace('idea', 'Idea ')} matches your filters. Try again!`;
             }
         };
 
-        if (selectedIdeas.length === 0) {
-            alert("No date ideas match your filters. Try different options!");
-            displayIdea('idea1', null);
-            displayIdea('idea2', null);
-            displayIdea('idea3', null);
-        } else {
-            displayIdea('idea1', selectedIdeas[0]);
-            displayIdea('idea2', selectedIdeas[1] || null);
-            displayIdea('idea3', selectedIdeas[2] || null);
-            document.getElementById('date-ideas-container').style.opacity = 0;
-            setTimeout(() => {
-                document.getElementById('date-ideas-container').style.opacity = 1;
-            }, 10);
-            alert('Here are your date night ideas!');
-        }
+        displayIdea('idea1', selectedIdeas[0] || null);
+        displayIdea('idea2', selectedIdeas[1] || null);
+        displayIdea('idea3', selectedIdeas[2] || null);
+
+        document.getElementById('date-ideas-container').style.opacity = 0;
+        setTimeout(() => {
+            document.getElementById('date-ideas-container').style.opacity = 1;
+        }, 10);
     };
 
     // Surprise Me function
@@ -189,12 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const categoryFilters = Array.from(document.querySelectorAll('.category-filters input[name="category"]:checked')).map(input => input.value);
         const budgetFilter = document.getElementById('budget-filter').value;
         const moodFilter = document.getElementById('mood-filter').value;
-        const ideas = getRandomDateIdea(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
-        if (ideas && ideas.length > 0) {
-            displayDateIdeas(ideas);
-        } else {
-            alert("No date ideas match your filters. Try again!");
-        }
+        const ideas = getRandomDateIdeas(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
+        displayDateIdeas(ideas);
     };
 
     // Theme toggle
@@ -232,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const categoryFilters = Array.from(document.querySelectorAll('.category-filters input[name="category"]:checked')).map(input => input.value);
             const budgetFilter = document.getElementById('budget-filter').value;
             const moodFilter = document.getElementById('mood-filter').value;
-            let filteredIdeas = getRandomDateIdea(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
+            let filteredIdeas = getRandomDateIdeas(kidFriendly, coupleOnly, typeFilters, categoryFilters, budgetFilter, moodFilter);
             if (id === 'quick-outdoor') {
                 filteredIdeas = filteredIdeas.filter(idea => idea && idea.tags.includes('outdoor'));
             } else if (id === 'quick-free') {
@@ -258,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.directions-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const section = btn.dataset.section;
-            const idea = defaultDateIdeas.find(idea => idea.description === document.getElementById(`${section}-description`).textContent);
+            const idea = dateIdeas.find(idea => idea.description === document.getElementById(`${section}-description`).textContent);
             if (idea) {
                 window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(idea.address)}`, '_blank');
             }
@@ -267,10 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Offline mode check
     if (!navigator.onLine) {
-        alert("You’re offline. Using cached ideas!");
+        console.log("Offline mode: Using cached ideas.");
     }
-    window.addEventListener('online', () => alert("Back online!"));
-    window.addEventListener('offline', () => alert("You’re offline. Using cached ideas!"));
 
     // Initial setup with persisted ideas
     displayDateIdeas(currentIdeas.length ? currentIdeas : []);
