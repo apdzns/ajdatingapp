@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aj-dating-game-v2';
+const CACHE_NAME = 'aj-dating-game-v3';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -24,7 +24,7 @@ self.addEventListener('fetch', event => {
         caches.match(event.request)
             .then(response => {
                 return response || fetch(event.request).catch(() => {
-                    return caches.match('/index.html'); // Fallback to cached index.html
+                    return caches.match('/index.html');
                 });
             })
     );
